@@ -1,0 +1,43 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/home/saharsh/esp/esp-idf/codes/rftx_test/build/CMakeFiles/bootloader"
+		},
+		{
+			"file" : "/home/saharsh/esp/esp-idf/codes/rftx_test/build/CMakeFiles/bootloader.rule"
+		},
+		{
+			"file" : "/home/saharsh/esp/esp-idf/codes/rftx_test/build/CMakeFiles/bootloader-complete.rule"
+		},
+		{
+			"file" : "/home/saharsh/esp/esp-idf/codes/rftx_test/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule"
+		},
+		{
+			"file" : "/home/saharsh/esp/esp-idf/codes/rftx_test/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule"
+		},
+		{
+			"file" : "/home/saharsh/esp/esp-idf/codes/rftx_test/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule"
+		},
+		{
+			"file" : "/home/saharsh/esp/esp-idf/codes/rftx_test/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule"
+		},
+		{
+			"file" : "/home/saharsh/esp/esp-idf/codes/rftx_test/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule"
+		},
+		{
+			"file" : "/home/saharsh/esp/esp-idf/codes/rftx_test/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule"
+		},
+		{
+			"file" : "/home/saharsh/esp/esp-idf/codes/rftx_test/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"bootloader"
+		],
+		"name" : "bootloader"
+	}
+}
