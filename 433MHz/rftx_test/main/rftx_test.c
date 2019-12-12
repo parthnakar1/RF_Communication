@@ -4,19 +4,15 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_system.h"
-// #include "esp_spi_flash.h"
 #include "esp_log.h"//......................
 #include "driver/uart.h"//..................
 #include "string.h"//.......................
-
-//#include "SRA18.h"
-//#include "driver/include/driver/gpio.h"
-
 #include "driver/gpio.h"
 #include "sdkconfig.h"
+// #include "esp_spi_flash.h"
+
 
 static const int RX_BUF_SIZE = 1024;
-
 #define TXD_PIN (GPIO_NUM_4)
 #define RXD_PIN (GPIO_NUM_5)
 
@@ -53,48 +49,9 @@ static void tx_task(void *arg)
     }
 }
 
-/*
-// #define RF_TX 27
-// #define RF_RX 18
-char arr[] = "hello";
-void transmit_pulses(void *arg)
-{
-	while(1){
-		// for(int i=0;i<5;i++){
-		// 	// printf("Char %d is %d\n", i,arr[i]);
-		// 	int var = (int)arr[i];
-		// 	bool binary[7] = {0};
-		// 	for(int j=6;j>=0;j--){
-		// 		binary[j] = var%2;
-		// 		var = var/2;
-		// 	}
-		// 	for(int j=0;j<6;j++){
-  //   			gpio_set_level(RF_TX,binary[j]);
-  //   			vTaskDelay(10/portTICK_PERIOD_MS);
-		// 	}
-		// }
-
-		gpio_set_level(RF_TX,1);
-		// vTaskDelay(40/portTICK_PERIOD_MS);
-		gpio_set_level(RF_TX,0);
-		// vTaskDelay(40/portTICK_PERIOD_MS);
-	}
-	
-}
-*/
 
 void app_main()
 {
-	// gpio_set_direction(RF_TX,GPIO_MODE_OUTPUT);
- //    gpio_set_level(RF_TX,0);
-	// xTaskCreate(&transmit_pulses,"transmit_pulses",4096,NULL,1,NULL);
-
-	// xTaskCreate(&blink_task,"blink task",4096,NULL,1,NULL);
-	
-	
 	init();
     xTaskCreate(tx_task, "uart_tx_task", 1024*2, NULL, configMAX_PRIORITIES-1, NULL);
-
-
-
 }
