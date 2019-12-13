@@ -16,7 +16,7 @@ static const int RX_BUF_SIZE = 1024;
 #define RXD_PIN (GPIO_NUM_5)
 
 //initialization
-static const char* START = "@";
+static const char* START = "@@@";
 static const char* ACK = "^^^";
 static const char* END = "~~~";
 static const char* DATA = "HelloWorld";
@@ -50,20 +50,25 @@ static void tx_task(void *arg)
             printf("wrote %d bytes to receiver\n", txBytes);
             free(data);
             rxBytes = uart_read_bytes(UART_NUM_1, data, RX_BUF_SIZE, 1000 / portTICK_RATE_MS);
-            printf("read %d bytes : %s\n", rxBytes, data);
+            printf("read %d bytes of start: %s\n", rxBytes, data);
         }
-        free(data);
+        // free(data);
         printf("Acknowledge1\n");
 
         //send data and stop bits
         printf("send data and stop bits\n");
         len = strlen(DATA);
         txBytes = uart_write_bytes(UART_NUM_1, DATA, len);
+        rxBytes = uart_read_bytes(UART_NUM_1, data, RX_BUF_SIZE, 1000 / portTICK_RATE_MS);
+        printf("Read %d bytes of data: %s\n", rxBytes, data);
+
         len = strlen(END);
-        free(data);
+        // free(data);
         txBytes = uart_write_bytes(UART_NUM_1, END, len);
         rxBytes = uart_read_bytes(UART_NUM_1, data, RX_BUF_SIZE, 1000 / portTICK_RATE_MS);
-        free(data);
+        printf("Read %d bytes of end: %s\n", rxBytes, data);
+
+        // free(data);
         printf("******bhej diya******\n");
     }
 }
