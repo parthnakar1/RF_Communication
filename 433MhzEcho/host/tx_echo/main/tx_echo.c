@@ -16,9 +16,10 @@ static const int RX_BUF_SIZE = 1024;
 #define RXD_PIN (GPIO_NUM_5)
 
 //initialization
-static const string START = "@@@"
-static const string ACK = "^^^"
-static const string END = "~~~"
+static const char* START = "@@@";
+static const char* ACK = "^^^";
+static const char* END = "~~~";
+static const char* DATA = "HelloWorld";
 
 
 //UART configurations
@@ -36,39 +37,32 @@ void init(void) {
     uart_driver_install(UART_NUM_1, RX_BUF_SIZE * 2, 0, 0, NULL, 0);
 }
 
-/* receiver */
-static void rx_task(void *arg)
-{
-    static const char *RX_TASK_TAG = "RX_TASK";
-    esp_log_level_set(RX_TASK_TAG, ESP_LOG_INFO);
-    uint8_t* data = (uint8_t*) malloc(RX_BUF_SIZE+1);
-    while (1) {
-        const int rxBytes = uart_read_bytes(UART_NUM_1, data, RX_BUF_SIZE, 1000 / portTICK_RATE_MS);
-        if (rxBytes > 0) {
-            data[rxBytes] = 0;
-            ESP_LOGI(RX_TASK_TAG, "Read %d bytes: '%s'", rxBytes, data);
-            ESP_LOG_BUFFER_HEXDUMP(RX_TASK_TAG, data, rxBytes, ESP_LOG_INFO);
-        }
-    }
-    free(data);
-}
-
-/* transmitter */
-int sendData(const char* logName, const char* data)
-{
-    const int len = strlen(data);
-    const int txBytes = uart_write_bytes(UART_NUM_1, data, len);
-    ESP_LOGI(logName, "Wrote %d bytes", txBytes);
-    return txBytes;
-}
-
 static void tx_task(void *arg)
 {
-    static const char *TX_TASK_TAG = "TX_TASK";
-    esp_log_level_set(TX_TASK_TAG, ESP_LOG_INFO);
+    //declarations
+    int rxBytes = 0, txBytes, len;
+    uint8_t* data = (uint8_t*) malloc(RX_BUF_SIZE+1);
     while (1) {
-        sendData(TX_TASK_TAG, "###Hello world###");
-        vTaskDelay(2000 / portTICK_PERIOD_MS);
+        while(data!=ACK){
+            printf("send start bits till ack\n"); 
+            len = strlen(START);
+            txBytes = uart_write_bytes(UART_NUM_1, START, len);
+            free(data);
+            rxBytes = uart_read_bytes(UART_NUM_1, data, RX_BUF_SIZE, 1000 / portTICK_RATE_MS);
+        }
+        free(data);
+        printf("Acknowledge1\n");
+
+        //send data and stop bits
+        printf("send data and stop bits\n");
+        len = strlen(DATA);
+        txBytes = uart_write_bytes(UART_NUM_1, DATA, len);
+        len = strlen(END);
+        free(data);
+        txBytes = uart_write_bytes(UART_NUM_1, END, len);
+        rxBytes = uart_read_bytes(UART_NUM_1, data, RX_BUF_SIZE, 1000 / portTICK_RATE_MS);
+        free(data);
+        printf("******bhej diya******\n")
     }
 }
 
@@ -76,6 +70,6 @@ static void tx_task(void *arg)
 void app_main(void)
 {   
     init();
-    xTaskCreate(rx_task, "uart_rx_task", 1024*2, NULL, configMAX_PRIORITIES, NULL);
+    //xTaskCreate(rx_task, "uart_rx_task", 1024*2, NULL, configMAX_PRIORITIES, NULL);
     xTaskCreate(tx_task, "uart_tx_task", 1024*2, NULL, configMAX_PRIORITIES-1, NULL);
 }

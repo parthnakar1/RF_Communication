@@ -1,0 +1,13 @@
+# Target labels
+ mconf-idf
+# Source files and their labels
+/home/saharsh/Desktop/RF_Communication/433MhzEcho/host/tx_echo/build/bootloader/CMakeFiles/mconf-idf
+/home/saharsh/Desktop/RF_Communication/433MhzEcho/host/tx_echo/build/bootloader/CMakeFiles/mconf-idf.rule
+/home/saharsh/Desktop/RF_Communication/433MhzEcho/host/tx_echo/build/bootloader/CMakeFiles/mconf-idf-complete.rule
+/home/saharsh/Desktop/RF_Communication/433MhzEcho/host/tx_echo/build/bootloader/mconf-idf-prefix/src/mconf-idf-stamp/mconf-idf-install.rule
+/home/saharsh/Desktop/RF_Communication/433MhzEcho/host/tx_echo/build/bootloader/mconf-idf-prefix/src/mconf-idf-stamp/mconf-idf-mkdir.rule
+/home/saharsh/Desktop/RF_Communication/433MhzEcho/host/tx_echo/build/bootloader/mconf-idf-prefix/src/mconf-idf-stamp/mconf-idf-download.rule
+/home/saharsh/Desktop/RF_Communication/433MhzEcho/host/tx_echo/build/bootloader/mconf-idf-prefix/src/mconf-idf-stamp/mconf-idf-update.rule
+/home/saharsh/Desktop/RF_Communication/433MhzEcho/host/tx_echo/build/bootloader/mconf-idf-prefix/src/mconf-idf-stamp/mconf-idf-patch.rule
+/home/saharsh/Desktop/RF_Communication/433MhzEcho/host/tx_echo/build/bootloader/mconf-idf-prefix/src/mconf-idf-stamp/mconf-idf-configure.rule
+/home/saharsh/Desktop/RF_Communication/433MhzEcho/host/tx_echo/build/bootloader/mconf-idf-prefix/src/mconf-idf-stamp/mconf-idf-build.rule
