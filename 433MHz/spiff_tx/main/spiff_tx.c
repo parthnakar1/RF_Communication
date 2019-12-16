@@ -21,7 +21,7 @@
 #define TXD_PIN (GPIO_NUM_4)
 // #define RXD_PIN (GPIO_NUM_5)
 static const char *TAG = "TX_TASK";
-
+char data[64];
 
 void init(void) {
     const uart_config_t uart_config = {
@@ -37,10 +37,11 @@ void init(void) {
     uart_driver_install(UART_NUM_1, 2048, 0, 0, NULL, 0);
 }
 
+
 void init_spiffs(void){
     // static const char *TAG = "TX_TASK";
 
-    esp_log_level_set(TAG, ESP_LOG_INFO);
+    // esp_log_level_set(TAG, ESP_LOG_INFO);
     ESP_LOGI(TAG, "Initializing SPIFFS");
     
     esp_vfs_spiffs_conf_t conf = {
@@ -80,10 +81,49 @@ void init_spiffs(void){
         ESP_LOGE(TAG, "Failed to open file for writing");
         return;
     }
-    fprintf(f, "###Hello World!###\n");
+    fprintf(f, "Hello World!\n");
     fclose(f);
     ESP_LOGI(TAG, "File written");
+
+    // Check if destination file exists before renaming
+    struct stat st;
+    if (stat("/spiffs/foo.txt", &st) == 0) {
+        // Delete it if it exists
+        unlink("/spiffs/foo.txt");
+    }
+
+    // Rename original file
+    ESP_LOGI(TAG, "Renaming file");
+    if (rename("/spiffs/hello.txt", "/spiffs/foo.txt") != 0) {
+        ESP_LOGE(TAG, "Rename failed");
+        return;
+    }
+
+    // Open renamed file for reading
+    ESP_LOGI(TAG, "Reading file");
+    f = fopen("/spiffs/foo.txt", "r");
+    if (f == NULL) {
+        ESP_LOGE(TAG, "Failed to open file for reading");
+        return;
+    }
+    char line[64];
+    fgets(line, sizeof(line), f);
+    fclose(f);
+    // strip newline
+    char* pos = strchr(line, '\n');
+    if (pos) {
+        *pos = '\0';
+    }
+    ESP_LOGI(TAG, "Read from file: '%s'", line);
+    for(int i=0;i<64;i++){
+        data[i] = line[i];
+    }
+
+    // All done, unmount partition and disable SPIFFS
+    esp_vfs_spiffs_unregister(NULL);
+    ESP_LOGI(TAG, "SPIFFS unmounted");
 }
+
 
 int sendData(const char* logName, const char* data)
 {
@@ -93,35 +133,16 @@ int sendData(const char* logName, const char* data)
     return txBytes;
 }
 
+
 static void tx_task(void *arg)
 {
-    esp_log_level_set(TAG, ESP_LOG_INFO);
-    while (1) {
-        FILE* f;
-        // Open renamed file for reading
-        ESP_LOGI(TAG, "Reading file");
-        f = fopen("/spiffs/hello.txt", "r");
-        if (f == NULL) {
-            ESP_LOGE(TAG, "Failed to open file for reading");
-            break;
-        }
-        char line[64];
-        fgets(line, sizeof(line), f);
-        fclose(f);
-        // strip newline
-        char* pos = strchr(line, '\n');
-        if (pos) {
-            *pos = '\0';
-        }
-        //ESP_LOGI(TAG, "Read from file: '%s'", line);
-        sendData(TAG, line);
-        // vTaskDelay(2000 / portTICK_PERIOD_MS);
-
-        // All done, unmount partition and disable SPIFFS
-        //esp_vfs_spiffs_unregister(NULL);
-        ESP_LOGI(TAG, "SPIFFS unmounted");
+    // esp_log_level_set(TAG, ESP_LOG_INFO);
+    // while (1) {
+        // init_spiffs();
+        sendData(TAG, data);
+        vTaskDelay(2000 / portTICK_PERIOD_MS);
         // char *data = "";
-    }
+    // }
 }
 
 
